@@ -8,6 +8,9 @@
   roles:
     - { role: ubuntu-docker, tags: ["complete", "base"] }
     - { role: ubuntu-kubernetes-core, tags: ["complete", "base"] }
+  pre_tasks:
+  - name: Disable swap for current session
+    command: swapoff -a
   tasks:
   - name: Make sure this is the most up to date version
     apt:

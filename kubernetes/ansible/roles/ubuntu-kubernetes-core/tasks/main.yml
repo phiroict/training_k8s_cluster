@@ -43,3 +43,7 @@
     path: /etc/containerd/config.toml
     line: "plugins.cri.systemd_cgroup = true"
     state: present
+- name: Set up the name of the manager for the cluster
+  lineinfile:
+    path: /etc/hosts
+    line: "192.168.51.2 {{ manager_url }}"

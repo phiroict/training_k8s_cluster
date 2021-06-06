@@ -1,3 +1,22 @@
 ---
 - name: Install the main images needed for the master
   shell: kubeadm config images pull
+- name: Initialize the kubernetes stack
+  shell: "kubeadm init --ignore-preflight-errors=Swap --pod-network-cidr=10.10.0.0/16 --control-plane-endpoint={{ manager_url }}"
+  register: output
+- name: Get the tokens from the output.
+  debug:
+    var: output.stdout_lines
+- name: Create folder at user home
+  file:
+    state: directory
+    path: "{{ lookup('env', 'HOME') }}/.kube"
+    owner: "{{ lookup('env', 'USER') }}"
+    group: "{{ lookup('env', 'GROUP') }}"
+- name: Copy over configuration
+  copy:
+    remote_src: yes
+    src: /etc/kubernetes/admin.conf
+    dest: "{{ lookup('env', 'HOME') }}/.kube/config"
+    owner: "{{ lookup('env', 'USER') }}"
+    group: "{{ lookup('env', 'GROUP') }}"
