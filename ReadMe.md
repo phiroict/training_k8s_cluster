@@ -60,4 +60,30 @@ sudo kubeadm join k8s-cluster.phiroict.co.nz:6443 --token qfyvrc.s2ddam3puw9lq5p
 At the moment we have one control pane (the manager) and four nodes.
 On the `https://computingforgeeks.com/deploy-kubernetes-cluster-on-ubuntu-with-kubeadm/` as examples how to test the stack.
 
+Install a network manager, Calico is a good default: 
+
+```bash
+kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+
+# Check with
+watch kubectl get pods --all-namespaces
+```
+
+Now install the dashboard: 
+```bash
+wget https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended.yaml
+mv recommended.yaml kubernetes-dashboard-deployment.yml
+
+kubectl apply -f  kubernetes-dashboard-deployment.yml
+```
+
+Change the deployment file by set a NodePort or get the one from  `kubernetes/k8s-dashboard.yaml`
+
+# Details
+
+Here technical details about this stack is shown. 
+
+## Ansible 
+
+## Virtual box configuration with Vagrant
 

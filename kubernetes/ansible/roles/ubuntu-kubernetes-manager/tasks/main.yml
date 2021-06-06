@@ -10,13 +10,13 @@
 - name: Create folder at user home
   file:
     state: directory
-    path: "{{ lookup('env', 'HOME') }}/.kube"
-    owner: "{{ lookup('env', 'USER') }}"
-    group: "{{ lookup('env', 'GROUP') }}"
+    path: "/home/vagrant/.kube"
+    owner: "vagrant"
+    group: "vagrant"
 - name: Copy over configuration
   copy:
     remote_src: yes
     src: /etc/kubernetes/admin.conf
-    dest: "{{ lookup('env', 'HOME') }}/.kube/config"
-    owner: "{{ lookup('env', 'USER') }}"
-    group: "{{ lookup('env', 'GROUP') }}"
+    dest: "/home/vagrant/.kube/config"
+    owner: "vagrant"
+    group: "vagrant"

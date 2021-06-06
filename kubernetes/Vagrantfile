@@ -18,6 +18,9 @@ Vagrant.configure("2") do |config|
     node.vm.box = "corevm"
     node.vm.network "private_network", ip: "192.168.51.3", virtualbox__intnet: "KubeNetwork", dhcp: false
     node.vm.hostname = "kube-node1"
+    node.vm.provider :virtualbox do |vbox|
+      vbox.customize ["modifyvm", :id, "--natnet1", "10.3/16"]
+    end
     node.vm.synced_folder '.', '/vagrant', disabled: true
   end
 
@@ -26,6 +29,9 @@ Vagrant.configure("2") do |config|
     node.vm.hostname = "kube-node2"
     node.vm.network "private_network", ip: "192.168.51.4", virtualbox__intnet: "KubeNetwork", dhcp: false
     node.vm.synced_folder '.', '/vagrant', disabled: true
+    node.vm.provider :virtualbox do |vbox|
+      vbox.customize ["modifyvm", :id, "--natnet1", "10.4/16"]
+    end
   end
 
   config.vm.define "kube_node3" do |node|
@@ -33,6 +39,9 @@ Vagrant.configure("2") do |config|
     node.vm.hostname = "kube-node3"
     node.vm.network "private_network", ip: "192.168.51.5", virtualbox__intnet: "KubeNetwork", dhcp: false
     node.vm.synced_folder '.', '/vagrant', disabled: true
+    node.vm.provider :virtualbox do |vbox|
+      vbox.customize ["modifyvm", :id, "--natnet1", "10.5/16"]
+    end
   end
 
   config.vm.define "kube_node4" do |node|
@@ -40,6 +49,9 @@ Vagrant.configure("2") do |config|
     node.vm.hostname = "kube-node4"
     node.vm.network "private_network", ip: "192.168.51.6", virtualbox__intnet: "KubeNetwork", dhcp: false
     node.vm.synced_folder '.', '/vagrant', disabled: true
+    node.vm.provider :virtualbox do |vbox|
+      vbox.customize ["modifyvm", :id, "--natnet1", "10.6/16"]
+    end
   end
 
 end
