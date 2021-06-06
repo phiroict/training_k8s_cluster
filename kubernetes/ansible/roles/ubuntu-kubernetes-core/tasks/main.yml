@@ -1,0 +1,45 @@
+---
+- name: add Kubernetes apt-key for APT repository
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+
+- name: add Kubernetes APT repository
+  apt_repository:
+    repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+    state: present
+    filename: 'kubernetes'
+
+- name: install kubernetes components
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  loop:
+    - vim
+    - git
+    - curl
+    - wget
+    - kubelet
+    - kubeadm
+    - kubectl
+- name: Create sysctl conf file for kubernetes
+  file:
+    state: touch
+    path: /etc/sysctl.d/20-kubernetes.conf
+- name: Set systemctl values
+  lineinfile:
+    path: /etc/sysctl.d/20-kubernetes.conf
+    line: "{{ item }}"
+    state: present
+  loop:
+    - "net.bridge.bridge-nf-call-ip6tables = 1"
+    - "net.bridge.bridge-nf-call-iptables = 1"
+    - "net.ipv4.ip_forward = 1"
+- name: Reload systemctl
+  shell: sysctl --system
+- name: Let containerd use the systemd namespace
+  lineinfile:
+    path: /etc/containerd/config.toml
+    line: "plugins.cri.systemd_cgroup = true"
+    state: present

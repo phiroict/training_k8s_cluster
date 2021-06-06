@@ -1,0 +1,3 @@
+---
+- name: Install the main images needed for the master
+  shell: kubeadm config images pull

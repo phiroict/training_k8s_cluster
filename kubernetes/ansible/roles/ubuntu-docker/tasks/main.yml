@@ -1,0 +1,46 @@
+---
+  - name: Add the docker Apt signing key, uses whichever key is at the URL
+    apt_key:
+      url: "https://download.docker.com/linux/ubuntu/gpg"
+      state: present
+  - name: Install docker repo
+    apt_repository:
+      repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
+      state: present
+  - name: Install docker
+    apt:
+      name: "{{ packages }}"
+      state: present
+    vars:
+      packages:
+      - docker-ce
+      - curl
+  - name: Install docker compose
+    shell: "curl -L https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-`uname -s`-`uname -m` -o /usr/bin/docker-compose && chmod +x /usr/bin/docker-compose"
+  - name: add group docker for user
+    user:
+      name: "{{ lookup('env','USER') }}"
+      append: yes
+      groups: ["docker"]
+  - name: Set docker config file placeholder
+    file:
+      path: "{{ lookup('env','HOME') }}/.docker"
+      state: directory
+      owner: "{{ lookup('env','USER') }}"
+      group: "{{ lookup('env','USER') }}"
+  - name: Set proxy settings when existing
+    template:
+      src: templates/docker-config.json.j2
+      dest: "{{ lookup('env','HOME') }}/.docker/config.json"
+      owner: "{{ lookup('env','USER') }}"
+      group: "{{ lookup('env','USER') }}"
+    when: docker_proxy is defined
+  - name: Install logger for docker
+    copy:
+      remote_src: no
+      src: docker-config.json
+      dest: /etc/docker/daemon.json
+  - name: Reload docker
+    systemd:
+      name: docker
+      state: restarted

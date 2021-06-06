@@ -1,0 +1,17 @@
+# ############### KUBERNETES MANAGER NODE ##############################################################################
+- name: Install the admin node for kubernetes
+  hosts: management
+  become: yes
+  remote_user: vagrant
+  vars_files:
+    - versions.yml
+  roles:
+    - { role: ubuntu-docker, tags: ["complete", "base"] }
+    - { role: ubuntu-kubernetes-core, tags: ["complete", "base"] }
+  tasks:
+  - name: Make sure this is the most up to date version
+    apt:
+      upgrade: yes
+      update_cache: yes
+  - name: Disable swap for current session
+    command: swapoff -a

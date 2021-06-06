@@ -1,0 +1,11 @@
+{
+  "proxies":
+  {
+    "default":
+    {
+      "httpProxy": "{{ docker_proxy }}",
+      "httpsProxy": "{{ docker_proxy }}",
+      "noProxy": "127.*,172.17*,localhost"
+    }
+  }
+}
