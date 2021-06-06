@@ -1,0 +1,39 @@
+Vagrant.configure("2") do |config|
+  config.vm.provision "shell", inline: "sudo apt update && sudo apt upgrade -y"
+
+  config.vm.define "kube_master" do |kube_master|
+    kube_master.vm.box = "corevm"
+    kube_master.vm.network "private_network", ip: "192.168.51.2", virtualbox__intnet: "KubeNetwork"
+    kube_master.vm.hostname = "kube-master"
+    kube_master.vm.synced_folder '.', '/vagrant', disabled: true
+  end
+
+  config.vm.define "kube_node1" do |node|
+    node.vm.box = "corevm"
+    node.vm.network "private_network", ip: "192.168.51.3", virtualbox__intnet: "KubeNetwork"
+    node.vm.hostname = "kube-node1"
+    node.vm.synced_folder '.', '/vagrant', disabled: true
+  end
+
+  config.vm.define "kube_node2" do |node|
+    node.vm.box = "corevm"
+    node.vm.hostname = "kube-node2"
+    node.vm.network "private_network", ip: "192.168.51.4", virtualbox__intnet: "KubeNetwork"
+    node.vm.synced_folder '.', '/vagrant', disabled: true
+  end
+
+  config.vm.define "kube_node3" do |node|
+    node.vm.box = "corevm"
+    node.vm.hostname = "kube-node3"
+    node.vm.network "private_network", ip: "192.168.51.5", virtualbox__intnet: "KubeNetwork"
+    node.vm.synced_folder '.', '/vagrant', disabled: true
+  end
+
+  config.vm.define "kube_node4" do |node|
+    node.vm.box = "corevm"
+    node.vm.hostname = "kube-node4"
+    node.vm.network "private_network", ip: "192.168.51.6", virtualbox__intnet: "KubeNetwork"
+    node.vm.synced_folder '.', '/vagrant', disabled: true
+  end
+
+end
