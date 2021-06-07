@@ -43,7 +43,25 @@
     path: /etc/containerd/config.toml
     line: "plugins.cri.systemd_cgroup = true"
     state: present
+- name: Create a configfile for kernel modules to load for containerd
+  file:
+    state: touch
+    path: /etc/modules-load.d/containerd.conf
+- name: Set module loads for containerd
+  lineinfile:
+    path: /etc/modules-load.d/containerd.conf
+    line: "{{ item }}"
+    state: present
+  loop:
+    - "overlay"
+    - "br_netfilter"
 - name: Set up the name of the manager for the cluster
   lineinfile:
     path: /etc/hosts
     line: "192.168.51.2 {{ manager_url }}"
+- name: Add vagrant to the docker group
+  user:
+    name: vagrant
+    groups:
+      - docker
+    append: yes

@@ -87,3 +87,21 @@ Here technical details about this stack is shown.
 
 ## Virtual box configuration with Vagrant
 
+
+## Usage 
+
+Log in to all the nodes. 
+
+- Get terminator
+- Start four termials 
+- Log in with 
+```bash
+ssh vagrant@localhost -p 220x # Where x is a element of {0,1,2,3}
+```
+
+## Reboot 
+
+After all the servers are back, resstart the kubelet by 
+```bash
+sudo systemctl restart kubelet
+```
