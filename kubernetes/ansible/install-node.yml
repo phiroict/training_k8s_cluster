@@ -11,6 +11,12 @@
   pre_tasks:
   - name: Disable swap for current session
     command: swapoff -a
+  - name: Set up the name of the managers and nodes for the cluster
+    lineinfile:
+      path: /etc/hosts
+      line: "{{ item.ip }} {{ item.name }}"
+    loop:
+      "{{ managers }}"
   tasks:
   - name: Make sure this is the most up to date version
     apt:

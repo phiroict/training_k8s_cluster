@@ -1,4 +1,9 @@
 ---
+- name: Remove swap from the fstab entries
+  lineinfile:
+    state: absent
+    path: /etc/fstab
+    regexp: "swap"
 - name: add Kubernetes apt-key for APT repository
   apt_key:
     url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
@@ -55,10 +60,13 @@
   loop:
     - "overlay"
     - "br_netfilter"
-- name: Set up the name of the manager for the cluster
+- name: Set up the name of the managers and nodes for the cluster
   lineinfile:
     path: /etc/hosts
-    line: "192.168.51.2 {{ manager_url }}"
+    line: "{{ item.ip }} {{ item.name }}"
+  loop:
+    "{{ nodes }}"
+
 - name: Add vagrant to the docker group
   user:
     name: vagrant

@@ -2,11 +2,15 @@
 - name: Install the main images needed for the master
   shell: kubeadm config images pull
 - name: Initialize the kubernetes stack
-  shell: "kubeadm init --ignore-preflight-errors=Swap --pod-network-cidr=10.0.0.0/8 --control-plane-endpoint={{ manager_url }}"
+  shell: "sudo kubeadm init --apiserver-advertise-address=192.168.51.2 --pod-network-cidr=10.244.0.0/16"
   register: output
 - name: Get the tokens from the output.
   debug:
     var: output.stdout_lines
+- name: Write the result to a file (insecure)
+  copy:
+    dest: /root/initial_cluster.txt
+    content: "{{ output.stdout_lines }}"
 - name: Create folder at user home
   file:
     state: directory
@@ -25,3 +29,17 @@
     remote_src: no
     src: calico.yaml
     dest: /home/vagrant/calico_vagrant.yaml
+- name: Get the flannel network plaform
+  get_url:
+    url:  https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+    dest: /home/vagrant/kube-flannel.yml
+- name: Patch flannel to use the eth1 interface and not the eth0 one
+  lineinfile:
+    path: /home/vagrant/kube-flannel.yml
+    insertafter: "        - --kube-subnet-mgr"
+    line: "        - --iface=eth1"
+    state: present
+- name: Set the environment for the kubelet service
+  lineinfile:
+    path: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+    line: 'Environment="KUBELET_EXTRA_ARGS=--node-ip=192.168.51.2"'

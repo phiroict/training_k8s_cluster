@@ -19,5 +19,7 @@ deinit:
 	-VBoxManage natnetwork remove --netname KubeNetwork
 cleanup: destroy deinit
 bounce_stack: cleanup all
+reload:
+	cd kubernetes && vagrant reload
 master_connect:
 	cd kubernetes && vagrant ssh kube_master
