@@ -43,11 +43,11 @@
     - "net.ipv4.ip_forward = 1"
 - name: Reload systemctl
   shell: sysctl --system
-- name: Let containerd use the systemd namespace
-  lineinfile:
-    path: /etc/containerd/config.toml
-    line: "plugins.cri.systemd_cgroup = true"
-    state: present
+#- name: Let containerd use the systemd namespace
+#  lineinfile:
+#    path: /etc/containerd/config.toml
+#    line: "plugins.cri.systemd_cgroup = true"
+#    state: present
 - name: Create a configfile for kernel modules to load for containerd
   file:
     state: touch

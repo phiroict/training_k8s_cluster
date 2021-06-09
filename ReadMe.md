@@ -60,14 +60,6 @@ sudo kubeadm join k8s-cluster.phiroict.co.nz:6443 --token qfyvrc.s2ddam3puw9lq5p
 At the moment we have one control pane (the manager) and four nodes.
 On the `https://computingforgeeks.com/deploy-kubernetes-cluster-on-ubuntu-with-kubeadm/` as examples how to test the stack.
 
-Install a network manager, Calico is a good default:
-
-```bash
-kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
-
-# Check with
-watch kubectl get pods --all-namespaces
-```
 
 Now install the dashboard: 
 ```bash
@@ -81,6 +73,16 @@ Now in the master run
 ```bash
 kubectl proxy
 ```
+
+Install a network manager, Flannel is a good default, do this after the dashboard release as it needs to run on the master and not on the nodes:
+
+```bash
+kubectl apply -f kube-flannel.yml
+
+# Check with
+watch kubectl get pods --all-namespaces
+```
+
 
 And forward port 8001 to the host from virtualbox 
 

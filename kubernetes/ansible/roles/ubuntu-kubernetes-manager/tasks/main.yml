@@ -43,3 +43,9 @@
   lineinfile:
     path: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
     line: 'Environment="KUBELET_EXTRA_ARGS=--node-ip=192.168.51.2"'
+- name: Get the dashboard application as well
+  get_url:
+    url: https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended.yaml
+    dest: /home/vagrant/dashboard.yaml
+    owner: vagrant
+    group: vagrant
