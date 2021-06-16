@@ -135,3 +135,126 @@ https://computingforgeeks.com/how-to-install-kubernetes-dashboard-with-nodeport/
 https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/#configure-cgroup-driver-used-by-kubelet-on-control-plane-node
 https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm-token/
 ```
+
+
+# Application and routing
+
+Need to have: Kubernetes cluster with one master and four nodes
+
+Create and setup the dashboard:
+
+`https://www.replex.io/blog/how-to-install-access-and-add-heapster-metrics-to-the-kubernetes-dashboard`
+In short:
+
+# Create a service account
+
+```bash
+kubectl create serviceaccount dashboard-admin-sa
+```
+
+# Bind the account to the dashboard
+
+```bash
+kubectl create clusterrolebinding dashboard-admin-sa --clusterrole=cluster-admin --serviceaccount=default:dashboard-admin-sa
+```
+
+# Get the token
+
+```bash
+kubectl get secrets
+```
+
+# Select the entry
+
+```bash
+kubectl describe secret dashboard-admin-sa-token-gkblm
+```
+
+# Now get the JWT token (token:) and log in.
+
+
+
+
+
+Install the prometheus stack by using helm
+
+```bash
+sudo snap install helm –classic
+```
+
+
+
+# Search for a grafana chart
+
+```bash
+helm search hub grafana -o json
+```
+
+# Get the chart from the json result. Install it and check its installation
+
+
+```bash
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+helm install mytrucking-monitoring prometheus-community/kube-prometheus-stack
+kubectl --namespace default get pods -l "release=mytrucking-monitoring"
+```
+
+
+
+
+
+Setting up an ingress point we install the nginx plugin ingress as decribed here:
+
+`https://kubernetes.github.io/ingress-nginx/deploy/`
+
+
+
+
+
+When that is done :
+
+`https://kubernetes.io/docs/concepts/services-networking/ingress/`
+
+Create an ingress for a service
+
+
+
+Now get the the url to get to the service:
+
+
+```bash
+kubectl describe service/mytrucking-monitoring-grafana
+```
+
+
+# Returns something like
+```text
+Name:              mytrucking-monitoring-grafana
+Namespace:         default
+Labels:            app.kubernetes.io/instance=mytrucking-monitoring
+                   app.kubernetes.io/managed-by=Helm
+                   app.kubernetes.io/name=grafana
+                   app.kubernetes.io/version=8.0.1
+                   helm.sh/chart=grafana-6.12.1
+Annotations:       meta.helm.sh/release-name: mytrucking-monitoring
+                   meta.helm.sh/release-namespace: default
+Selector:          app.kubernetes.io/instance=mytrucking-monitoring,app.kubernetes.io/name=grafana
+Type:              ClusterIP
+IP Family Policy:  SingleStack
+IP Families:       IPv4
+IP:                10.107.137.163
+IPs:               10.107.137.163
+Port:              service  80/TCP
+TargetPort:        3000/TCP
+Endpoints:         10.244.3.7:3000
+Session Affinity:  None
+Events:            <none>
+```
+
+
+The endpoint is what you use on the master or wherever you forwarded this to.
+
+
+
+This assumes the proxy is running (You started that for the dashboard)  
