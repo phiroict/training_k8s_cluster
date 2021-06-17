@@ -257,4 +257,41 @@ The endpoint is what you use on the master or wherever you forwarded this to.
 
 
 
-This assumes the proxy is running (You started that for the dashboard)  
+This assumes the proxy is running (You started that for the dashboard)
+
+## MySQL installation 
+Via the helm application install the mysql database 
+
+MySQL installation
+
+```bash
+helm repo add bitnami https://charts.bitnami.com/bitnami
+```
+
+
+
+```bash
+helm install mytrucking-database bitnami/mysql --values settings-mysql.yml
+```
+
+
+```yaml
+---
+auth:
+    rootPassword: s3cret!
+    username: demo
+    password: demopass
+    replicationUser: replicator
+    replicationPassword: replicat0r 
+```
+
+
+The settings are from the installation page https://artifacthub.io/packages/helm/bitnami/mysql
+
+Get the password later with
+
+
+
+
+
+echo Password : $(kubectl get secret --namespace default mytrucking-database-mysql -o jsonpath="{.data.mysql-root-password}" | base64 –decode) 
