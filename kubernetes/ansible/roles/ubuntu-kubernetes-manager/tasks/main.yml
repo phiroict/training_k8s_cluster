@@ -49,3 +49,15 @@
     dest: /home/vagrant/dashboard.yaml
     owner: vagrant
     group: vagrant
+- name: Install snap
+  apt:
+    state: present
+    name: snap
+- name: Install visual code and helm
+  community.general.snap:
+    classic: yes
+    name: "{{ item }}"
+    state: present
+  loop:
+    - helm
+    - code

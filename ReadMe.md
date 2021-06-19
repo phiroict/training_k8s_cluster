@@ -7,9 +7,24 @@ This is a part of a run through of the creation of a kubernetes cluster from scr
 - Archlinux rolling
 - Virtual box 6.x
 - Vagrant 2.2.x
+- Packer 1.7.x
 
 # Install
 These commands do most of the installation
+Create two boxes from the ubuntu packer scripts. 
+
+`corevm_gui` based on ubuntu-desktop
+`corevm_node` based on ubuntu-server 
+
+Get the packer scripts from `https://github.com/jvautier/packer-ubuntu` 
+
+After the build create the vagrant boxes by: 
+
+```bash
+vagrant box add corevm_node builds/ubuntu-20.04-node.virtualbox.box
+vagrant box add corevm_gui builds/ubuntu-20.04-desktop.virtualbox.box
+```
+
 ```bash
 make init
 make up
@@ -65,7 +80,6 @@ Now install the dashboard:
 ```bash
 wget https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended.yaml
 mv recommended.yaml kubernetes-dashboard-deployment.yml
-
 kubectl apply -f  kubernetes-dashboard-deployment.yml
 ```
 
@@ -176,10 +190,10 @@ kubectl describe secret dashboard-admin-sa-token-gkblm
 
 
 
-Install the prometheus stack by using helm
+Install the prometheus stack by using helm, and visual code for editing
 
 ```bash
-sudo snap install helm –classic
+sudo snap install code helm -–classic
 ```
 
 
@@ -295,3 +309,22 @@ Get the password later with
 
 
 echo Password : $(kubectl get secret --namespace default mytrucking-database-mysql -o jsonpath="{.data.mysql-root-password}" | base64 –decode) 
+
+Create persistent storage so the mysql claim can be created against it. For instance 10GiB. You need a folder created on all nodes to be able to do that. 
+
+
+
+
+
+
+Login with 
+```bash
+# Start an instance
+kubectl run mytrucking-database-mysql-client --rm --tty -i --restart='Never' --image  docker.io/bitnami/mysql:8.0.25-debian-10-r16 --namespace default --command -- bash
+# COnnect to the database
+mysql -h mytrucking-database-mysql.default.svc.cluster.local -uroot -p my_database
+# Get the password
+ROOT_PASSWORD=$(kubectl get secret --namespace default mytrucking-database-mysql -o jsonpath="{.data.mysql-root-password}" | base64 --decode)
+# Change a password
+helm upgrade --namespace default mytrucking-database bitnami/mysql --set auth.rootPassword=$ROOT_PASSWORD
+```

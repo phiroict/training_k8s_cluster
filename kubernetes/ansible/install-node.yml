@@ -24,3 +24,11 @@
       update_cache: yes
   - name: Disable swap for current session
     command: swapoff -a
+  - name: Create persistent mounts folder
+    file:
+      state: directory
+      path: /opt/kubenetes/persistent
+      mode: 0777
+      owner: root
+      group: root
+      recurse: yes

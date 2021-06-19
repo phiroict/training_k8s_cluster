@@ -1,12 +1,15 @@
 init: deinit
 	echo "Create network for virtualbox"
 	VBoxManage natnetwork add --netname KubeNetwork --network "192.168.51.0/24" --enable
+	ansible-galaxy collection install community.general
 up:
 	cd kubernetes && vagrant up --parallel
 status:
 	cd kubernetes && vagrant status
 down:
 	cd kubernetes && vagrant halt
+master:
+	cd kubernetes && vagrant ssh kube_master
 provision:
 	cd kubernetes && vagrant up --provision
 install:

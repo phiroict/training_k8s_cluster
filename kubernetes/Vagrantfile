@@ -8,7 +8,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define "kube_master" do |kube_master|
-    kube_master.vm.box = "corevm"
+    kube_master.vm.box = "corevm_gui"
     kube_master.vm.network "private_network", ip: "192.168.51.2", virtualbox__intnet: "KubeNetwork", dhcp: false
     kube_master.vm.hostname = "kube-master"
     kube_master.vm.synced_folder '.', '/vagrant', disabled: true
@@ -16,11 +16,13 @@ Vagrant.configure("2") do |config|
     kube_master.vm.provider "virtualbox" do |v|
       v.gui = true
       v.customize ["modifyvm", :id, "--vram", "64"]
+      v.memory = 8192
+      v.cpus = 4
     end
   end
 
   config.vm.define "kube_node1" do |node|
-    node.vm.box = "corevm"
+    node.vm.box = "corevm_node"
     node.vm.network "private_network", ip: "192.168.51.3", virtualbox__intnet: "KubeNetwork", dhcp: false
     node.vm.hostname = "kube-node1"
     node.vm.provider :virtualbox do |vbox|
@@ -30,7 +32,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define "kube_node2" do |node|
-    node.vm.box = "corevm"
+    node.vm.box = "corevm_node"
     node.vm.hostname = "kube-node2"
     node.vm.network "private_network", ip: "192.168.51.4", virtualbox__intnet: "KubeNetwork", dhcp: false
     node.vm.synced_folder '.', '/vagrant', disabled: true
@@ -40,7 +42,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define "kube_node3" do |node|
-    node.vm.box = "corevm"
+    node.vm.box = "corevm_node"
     node.vm.hostname = "kube-node3"
     node.vm.network "private_network", ip: "192.168.51.5", virtualbox__intnet: "KubeNetwork", dhcp: false
     node.vm.synced_folder '.', '/vagrant', disabled: true
@@ -50,7 +52,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define "kube_node4" do |node|
-    node.vm.box = "corevm"
+    node.vm.box = "corevm_node"
     node.vm.hostname = "kube-node4"
     node.vm.network "private_network", ip: "192.168.51.6", virtualbox__intnet: "KubeNetwork", dhcp: false
     node.vm.synced_folder '.', '/vagrant', disabled: true
