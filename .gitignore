@@ -33,3 +33,7 @@ hs_err_pid*
 # Log files (if you are creating logs in debug mode, uncomment this)
 # *.log
 
+### Packer template
+*.box
+packer_cache
+builds/

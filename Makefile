@@ -19,7 +19,7 @@ enroll_nodes:
 	cd kubernetes/ansible && ansible-playbook -i hosts.yml --user vagrant enroll-nodes.yaml
 master_components_install:
 	cd kubernetes/ansible && ansible-playbook -i hosts.yml --user vagrant master_components_install.yml
-all: init up install
+all: init up install join enroll_nodes master_components_install
 destroy:
 	cd kubernetes && vagrant destroy -f
 deinit:
@@ -30,3 +30,12 @@ reload:
 	cd kubernetes && vagrant reload
 master_connect:
 	cd kubernetes && vagrant ssh kube_master
+join:
+	cd kubernetes/ansible && ansible-playbook --connection=local join-enroll-inject.yml
+image:
+	cd packer/virtualbox/20.04.02 && bash build-virtualbox.sh
+	cd packer/virtualbox/20.04.02 && bash build-virtualbox-bare.sh
+	vagrant box remove corevm_gui
+	vagrant box remove corevm_node
+	cd packer/builds && vagrant box add corevm_node ubuntu-20.04-gui.virtualbox.box
+	cd packer/builds && vagrant box add corevm_gui ubuntu-desktop-20.04.virtualbox.box

@@ -1,0 +1,9 @@
+- name: Install the admin node for kubernetes
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Read join content
+      lineinfile:
+        path: enroll-nodes.yaml
+        regexp: "^    shell"
+        line: "    shell: \"{{ lookup('file', '/tmp/manager1/root/node-join-command.txt') }}\""

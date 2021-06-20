@@ -1,6 +1,13 @@
 # Building Kubernetes network on virtualbox
 
 This is a part of a run through of the creation of a kubernetes cluster from scratch.
+Now, as more and more Kubernetes is cloud native and does not offer any in depth knowledge of the 
+configuration it can be good to create the stack from scratch to see what parts are involved. 
+This example makes use of vanilla kubernetes to expose the core ideas of the platform. 
+
+This set was set up for teaching the author the basic setup and will evolve over time to include more extra ideas like securing, 
+sidecars and monitoring. 
+
 
 # Stack
 
@@ -46,6 +53,16 @@ Run the
 make master_components_install
 ```
 to install the network and the dashboard. 
+
+To run all this in one go run: 
+
+```bash
+make all 
+```
+
+The tasks are defined like this: 
+
+![Make tasks](docs/images/diagram_build.jpg)
 
 ## Credentials dashboard
 Get the account for the dashboard by: 

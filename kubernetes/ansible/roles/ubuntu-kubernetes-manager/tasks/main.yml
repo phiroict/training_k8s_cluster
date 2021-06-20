@@ -11,6 +11,18 @@
   copy:
     dest: /root/initial_cluster.txt
     content: "{{ output.stdout_lines }}"
+- name: Copy over join grabber
+  copy:
+    src: "join-grabber.py"
+    remote_src: no
+    dest: "/root/join-grabber.py"
+    mode: 0700
+- name: Grab the join string
+  shell: python3 /root/join-grabber.py /root/initial_cluster.txt > /root/node-join-command.txt
+- name: Get the node-join-command
+  fetch:
+    src: /root/node-join-command.txt
+    dest: /tmp/
 - name: Create folder at user home
   file:
     state: directory
@@ -67,3 +79,5 @@
   loop:
     - helm
     - code
+- name: Cast the desktop url to a file
+  shell: echo "http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/." > /home/vagrant/dashboard_url.txt
