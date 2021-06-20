@@ -49,10 +49,16 @@
     dest: /home/vagrant/dashboard.yaml
     owner: vagrant
     group: vagrant
+- name: Rebuild debconf database to avoid a warning about corruption
+  shell: /usr/share/debconf/fix_db.pl
 - name: Install snap
   apt:
     state: present
     name: snap
+- name: Install gui
+  apt:
+    state: present
+    name: lubuntu-desktop
 - name: Install visual code and helm
   community.general.snap:
     classic: yes

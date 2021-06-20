@@ -15,6 +15,10 @@ provision:
 install:
 	cd kubernetes/ansible && ansible-playbook -i hosts.yml --user vagrant install_management_node.yml
 	cd kubernetes/ansible && ansible-playbook -i hosts.yml --user vagrant install-node.yml
+enroll_nodes:
+	cd kubernetes/ansible && ansible-playbook -i hosts.yml --user vagrant enroll-nodes.yaml
+master_components_install:
+	cd kubernetes/ansible && ansible-playbook -i hosts.yml --user vagrant master_components_install.yml
 all: init up install
 destroy:
 	cd kubernetes && vagrant destroy -f

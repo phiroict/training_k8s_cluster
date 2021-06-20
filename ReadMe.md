@@ -30,12 +30,60 @@ make init
 make up
 make install
 ```
+Now from the master installation ansible commandline results get the join command, it will look like: 
+```bash
+kubeadm join 192.168.51.2:6443 --token tk2fjv.6i9ihz55gyw6xiuj --discovery-token-ca-cert-hash sha256:77e4cf0e937c547fd60f7bbdfa72b8582702dd8189a0fc6589c93107aea99903
+```
 
-Reprovisions with
+Place it in the `kubernetes/ansible/enroll-nodes.yaml` file and then run 
+```bash
+make enroll
+```
+This will enroll the nodes to the master, but there is no network yet. 
+
+Run the 
+```bash
+make master_components_install
+```
+to install the network and the dashboard. 
+
+## Credentials dashboard
+Get the account for the dashboard by: 
+
+### Create a service account
+(Done by the `make master_components_install` task)
+```bash
+kubectl create serviceaccount dashboard-admin-sa
+```
+
+### Bind the account to the dashboard
+(Done by the `make master_components_install` task)
+```bash
+kubectl create clusterrolebinding dashboard-admin-sa --clusterrole=cluster-admin --serviceaccount=default:dashboard-admin-sa
+```
+
+### Get the token
+(You need to get this manually)
+```bash
+kubectl get secrets
+```
+
+### Select the entry
+(You need to get this manually)
+```bash
+kubectl describe secret dashboard-admin-sa-token-<random_value>
+```
+
+Now get the JWT token (token:) and log in.
+
+
+If you want to rerun the vagrant init you can run:
 
 ```bash
 make provision
 ```
+However, this does not rerun the ansible scripts. 
+
 
 And clean up with
 
@@ -46,6 +94,8 @@ which will delete the stack and remove the network from virtualbox.
 
 
 # Post install
+Parts are done by the `master_components_install.yml` scripts. 
+
 
 ## Manager
 After installation run on the manager, this is the result of the init:
@@ -54,7 +104,7 @@ sudo kubeadm token create
 
 ahw5ao.uyjl3hehqhvpy1l8
 ```
-You get output from the ansible script for the manager like
+You get output from the ansible script for the manager like (Done by the `make enroll` task, see above)
 
 ```bash
 kubeadm join k8s-cluster.phiroict.co.nz:6443 --token qfyvrc.s2ddam3puw9lq5p8 \\",
@@ -62,7 +112,7 @@ kubeadm join k8s-cluster.phiroict.co.nz:6443 --token qfyvrc.s2ddam3puw9lq5p8 \\"
 ```
 
 ## Node
-Now join the cluster for each of the nodes  
+Now join the cluster for each of the nodes  (Done by the `make enroll` task)
 
 ```bash
 sudo kubeadm join k8s-cluster.phiroict.co.nz:6443 --token qfyvrc.s2ddam3puw9lq5p8 --discovery-token-ca-cert-hash sha256:ee5c332d4181c4ba7e4310da1e83376ceb2dd1e8e1d15665354c575f928df680
@@ -160,31 +210,6 @@ Create and setup the dashboard:
 `https://www.replex.io/blog/how-to-install-access-and-add-heapster-metrics-to-the-kubernetes-dashboard`
 In short:
 
-# Create a service account
-
-```bash
-kubectl create serviceaccount dashboard-admin-sa
-```
-
-# Bind the account to the dashboard
-
-```bash
-kubectl create clusterrolebinding dashboard-admin-sa --clusterrole=cluster-admin --serviceaccount=default:dashboard-admin-sa
-```
-
-# Get the token
-
-```bash
-kubectl get secrets
-```
-
-# Select the entry
-
-```bash
-kubectl describe secret dashboard-admin-sa-token-gkblm
-```
-
-# Now get the JWT token (token:) and log in.
 
 
 
