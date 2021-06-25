@@ -1,0 +1,40 @@
+- name: Install the admin node for kubernetes
+  hosts: management
+  become: yes
+  remote_user: vagrant
+  vars:
+    istio_version: 1.10.2
+    nginx_ingress_controller_version: 0.47.0
+  tasks:
+  - name: Create istio installation location
+    file:
+      state: directory
+      path: /opt/istio
+      mode: 0755
+  - name: Get istio
+    get_url:
+      url: https://istio.io/downloadIstio
+      dest: /opt/istio/install.sh
+      mode: 0700
+  - name: Install istio
+    shell: "ISTIO_VERSION={{ istio_version }} TARGET_ARCH=x86_64 sh ./install.sh"
+    chdir: /opt/istio
+  - name: Link istio application
+    file:
+      state: link
+      src: "/opt/istio/istio-{{ istio_version }}/bin/istioctl"
+      dest: /usr/bin/istioctl
+      mode: 0755
+  - name: Initialize the istio stack
+    shell: istioctl install --set profile=demo -y
+    become_user: vagrant
+  - name: Attach the sidecars to the default namespace
+    shell: kubectl label namespace default istio-injection=enabled
+    become_user: vagrant
+  - name: Install monitoring stack
+    shell: "kubectl apply -f /opt/istio/istio-{{ istio_version }}/samples/addons"
+    become_user: vagrant
+  - name: Install an ingress component
+    shell: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v{{ nginx_ingress_controller_version }}/deploy/static/provider/cloud/deploy.yaml
+    become_user: vagrant
+

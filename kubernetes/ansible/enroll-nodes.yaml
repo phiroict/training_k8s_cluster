@@ -4,4 +4,4 @@
   remote_user: vagrant
   tasks:
   - name: Enroll the nodes
-    shell: "kubeadm join 192.168.51.2:6443 --token afq7xf.v2gxe7cm94b8hpkl  --discovery-token-ca-cert-hash sha256:66b11c1784e6350fe460b2e25af5425c3616152205b1acc0744b9c353c2fd5b6"
+    shell: "kubeadm join 192.168.51.2:6443 --token ohd6n9.g0y6i3hdhr3b0xqo  --discovery-token-ca-cert-hash sha256:ea82e725a2ee5ce5de6484750d7ac9da5400226d1d4456da259e0bbbf315a984"

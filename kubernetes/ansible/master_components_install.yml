@@ -23,3 +23,12 @@
         SESSION_MANAGER: "local/kube-master:@/tmp/:ICE-unix/2345,unix/kube-master:/tmp/:ICE-unix/2345:"
         HOME: /home/vagrant
       become_user: vagrant
+    - name: Install the dashboard egress
+      copy:
+        src:  k8s_ingress_dashboard.yml
+        dest: /home/vagrant/
+    - name: Set up the ingress
+      shell: kubectl -f k8s_ingress_dashboard.yml -n /home/vagrant/kubernetes-dashboard
+      become_user: vagrant
+
+

@@ -19,6 +19,9 @@ enroll_nodes:
 	cd kubernetes/ansible && ansible-playbook -i hosts.yml --user vagrant enroll-nodes.yaml
 master_components_install:
 	cd kubernetes/ansible && ansible-playbook -i hosts.yml --user vagrant master_components_install.yml
+istio_install:
+	cd kubernetes/ansible && ansible-playbook -i hosts.yml --user vagrant master_istio_install.yml
+almost_all: init up install join enroll_nodes
 all: init up install join enroll_nodes master_components_install
 destroy:
 	cd kubernetes && vagrant destroy -f
