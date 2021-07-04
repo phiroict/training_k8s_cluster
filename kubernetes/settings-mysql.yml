@@ -1,0 +1,7 @@
+---
+auth:
+    rootPassword: s3cret!
+    username: demo
+    password: demopass
+    replicationUser: replicator
+    replicationPassword: replicat0r

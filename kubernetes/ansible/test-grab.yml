@@ -1,0 +1,14 @@
+- hosts: localhost
+  tasks:
+  - name: Get Version
+    shell: |
+      echo 'kubeadmin join bla bla ' \
+      echo 'other line'
+    register: results
+  - name: set regex
+    set_fact:
+      re: '^[kubeadmin join ][\s\S]*?(?=\n.*?=|$)'
+  - set_fact:
+      value: "{{ results.stdout | regex_search(re) }}"
+  - debug:
+      var: value
