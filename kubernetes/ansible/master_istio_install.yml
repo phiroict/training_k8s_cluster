@@ -18,7 +18,8 @@
       mode: 0700
   - name: Install istio
     shell: "ISTIO_VERSION={{ istio_version }} TARGET_ARCH=x86_64 sh ./install.sh"
-    chdir: /opt/istio
+    args:
+      chdir: /opt/istio
   - name: Link istio application
     file:
       state: link

@@ -28,7 +28,8 @@
         src:  k8s_ingress_dashboard.yml
         dest: /home/vagrant/
     - name: Set up the ingress
-      shell: kubectl -f k8s_ingress_dashboard.yml -n /home/vagrant/kubernetes-dashboard
+      shell: kubectl apply -f k8s_ingress_dashboard.yml -n kubernetes-dashboard
       become_user: vagrant
+      ignore_errors: yes
 
 
