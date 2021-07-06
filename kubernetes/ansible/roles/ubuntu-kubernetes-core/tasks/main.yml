@@ -73,3 +73,6 @@
     groups:
       - docker
     append: yes
+- name: Set the timezone
+  community.general.timezone:
+    name: "Pacific/Auckland"

@@ -260,7 +260,7 @@ kubectl --namespace default get pods -l "release=mytrucking-monitoring"
 
 
 
-Setting up an ingress point we install the nginx plugin ingress as decribed here:
+Setting up an ingress point we install the nginx plugin ingress as described here:
 
 `https://kubernetes.github.io/ingress-nginx/deploy/`
 

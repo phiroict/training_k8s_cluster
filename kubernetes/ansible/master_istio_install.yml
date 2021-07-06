@@ -1,3 +1,4 @@
+
 - name: Install the admin node for kubernetes
   hosts: management
   become: yes
@@ -20,6 +21,12 @@
     shell: "ISTIO_VERSION={{ istio_version }} TARGET_ARCH=x86_64 sh ./install.sh"
     args:
       chdir: /opt/istio
+  - name: Set permissions
+    file:
+      state: directory
+      path: "/opt/istio/istio-{{ istio_version }}"
+      mode: 0755
+      recurse: yes
   - name: Link istio application
     file:
       state: link
@@ -36,6 +43,6 @@
     shell: "kubectl apply -f /opt/istio/istio-{{ istio_version }}/samples/addons"
     become_user: vagrant
   - name: Install an ingress component
-    shell: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v{{ nginx_ingress_controller_version }}/deploy/static/provider/cloud/deploy.yaml
+    shell: "kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v{{ nginx_ingress_controller_version }}/deploy/static/provider/cloud/deploy.yaml"
     become_user: vagrant
 
