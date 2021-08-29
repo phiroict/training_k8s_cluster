@@ -4,8 +4,8 @@
   become: yes
   remote_user: vagrant
   vars:
-    istio_version: 1.10.2
-    nginx_ingress_controller_version: 0.47.0
+    istio_version: 1.11.1
+    nginx_ingress_controller_version: 1.0.0
   tasks:
   - name: Create istio installation location
     file:

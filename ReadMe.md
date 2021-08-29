@@ -370,3 +370,14 @@ ROOT_PASSWORD=$(kubectl get secret --namespace default mytrucking-database-mysql
 # Change a password
 helm upgrade --namespace default mytrucking-database bitnami/mysql --set auth.rootPassword=$ROOT_PASSWORD
 ```
+
+
+# Istio
+
+Service mesh between services. 
+
+Open the kiali dashboard by: 
+
+```bash
+istioctl dashboard kiali
+```

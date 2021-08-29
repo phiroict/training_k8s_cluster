@@ -1,6 +1,6 @@
 ---
   docker_compose_version: "1.29.2"
-  kubernetes_version: 1.20
+  kubernetes_version: 1.22.1
   manager_url: "k8s-cluster.phiroict.co.nz"
   managers:
     - name: kube-master

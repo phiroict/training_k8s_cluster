@@ -1,0 +1,27 @@
+---
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: k8s-frontend
+    labels:
+      app: k8s-frontend
+  spec:
+    replicas: 3
+    selector:
+      matchLabels:
+        app: k8s-frontend
+    template:
+      metadata:
+        labels:
+          app: k8s-frontend
+      spec:
+        containers:
+        - name: k8s-frontend
+          image: phiroict/k8s-test-frontend:20210829
+          ports:
+          - containerPort: 5000
+          env:
+          - name: BACKEND_SERVICE
+            value: backend
+          - name: BACKEND_PORT
+            value: "4000"

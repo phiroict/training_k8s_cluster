@@ -42,3 +42,7 @@ image:
 	vagrant box remove corevm_node
 	cd packer/builds && vagrant box add corevm_node ubuntu-20.04-gui.virtualbox.box
 	cd packer/builds && vagrant box add corevm_gui ubuntu-desktop-20.04.virtualbox.box
+build_frontend:
+	cd frontend && docker build -t phiroict/k8s-test-frontend:20210829 . && docker push phiroict/k8s-test-frontend:20210829
+build_backend:
+	cd backend && docker build -t phiroict/k8s-test-backend:20210829 . && docker push phiroict/k8s-test-backend:20210829
