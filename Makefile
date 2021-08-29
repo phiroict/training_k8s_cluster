@@ -45,4 +45,4 @@ image:
 build_frontend:
 	cd frontend && docker build -t phiroict/k8s-test-frontend:20210829 . && docker push phiroict/k8s-test-frontend:20210829
 build_backend:
-	cd backend && docker build -t phiroict/k8s-test-backend:20210829 . && docker push phiroict/k8s-test-backend:20210829
+	cd backend && docker build -t phiroict/k8s-test-backend:20210829.2 . && docker push phiroict/k8s-test-backend:20210829.2
