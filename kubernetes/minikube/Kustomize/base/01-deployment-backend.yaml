@@ -6,7 +6,7 @@
     labels:
       app: k8s-backend
   spec:
-    replicas: 3
+    replicas: 10
     selector:
       matchLabels:
         app: k8s-backend
