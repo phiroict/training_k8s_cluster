@@ -29,6 +29,6 @@ spec:
         exact: /
     route:
     - destination:
-        host: frontend
+        host: k8s-frontend
         port:
           number: 5000
