@@ -5,7 +5,7 @@ metadata:
   namespace: default
 spec:
   selector:
-    app: frontend
+    app: k8s-frontend
   servers:
   - port:
       number: 5000
@@ -29,6 +29,6 @@ spec:
         exact: /
     route:
     - destination:
-        host: k8s-frontend
+        host: frontend
         port:
           number: 5000
