@@ -38,9 +38,9 @@ join:
 image:
 	cd packer/virtualbox/20.04.02 && bash build-virtualbox.sh
 	cd packer/virtualbox/20.04.02 && bash build-virtualbox-bare.sh
-	vagrant box remove corevm_gui
-	vagrant box remove corevm_node
-	cd packer/builds && vagrant box add corevm_node ubuntu-20.04-gui.virtualbox.box
+	-vagrant box remove corevm_gui
+	-vagrant box remove corevm_node
+	cd packer/builds && vagrant box add corevm_node ubuntu-20.04.virtualbox.box
 	cd packer/builds && vagrant box add corevm_gui ubuntu-desktop-20.04.virtualbox.box
 check_frontend:
 	cd frontend && docker run --rm -i hadolint/hadolint < Dockerfile
