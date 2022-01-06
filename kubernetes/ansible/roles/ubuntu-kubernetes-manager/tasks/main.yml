@@ -43,7 +43,7 @@
     dest: /home/vagrant/calico_vagrant.yaml
 - name: Get the flannel network plaform
   get_url:
-    url:  https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+    url:  https://raw.githubusercontent.com/coreos/flannel/master/Documentation/ kube-flannel.yml
     dest: /home/vagrant/kube-flannel.yml
 - name: Patch flannel to use the eth1 interface and not the eth0 one
   lineinfile:

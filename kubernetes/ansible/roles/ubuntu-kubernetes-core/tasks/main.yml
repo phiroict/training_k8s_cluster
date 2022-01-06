@@ -28,6 +28,7 @@
     - kubelet
     - kubeadm
     - kubectl
+    - etcd-client
 - name: Create sysctl conf file for kubernetes
   file:
     state: touch

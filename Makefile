@@ -33,6 +33,9 @@ reload:
 	cd kubernetes && vagrant reload
 master_connect:
 	cd kubernetes && vagrant ssh kube_master
+node:
+	cd kubernetes && vagrant ssh kube_node1
+
 join:
 	cd kubernetes/ansible && ansible-playbook --connection=local join-enroll-inject.yml
 image:

@@ -155,6 +155,7 @@ Now in the master run
 kubectl proxy
 ```
 
+
 Install a network manager, Flannel is a good default, do this after the dashboard release as it needs to run on the master and not on the nodes:
 
 ```bash

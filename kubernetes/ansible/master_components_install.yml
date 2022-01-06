@@ -19,6 +19,7 @@
         - "kubectl apply -f dashboard.yaml"
         - "kubectl create serviceaccount dashboard-admin-sa"
         - "kubectl create clusterrolebinding dashboard-admin-sa --clusterrole=cluster-admin --serviceaccount=default:dashboard-admin-sa"
+
       environment:
         SESSION_MANAGER: "local/kube-master:@/tmp/:ICE-unix/2345,unix/kube-master:/tmp/:ICE-unix/2345:"
         HOME: /home/vagrant
