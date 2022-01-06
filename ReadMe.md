@@ -14,7 +14,7 @@ sidecars and monitoring.
 - Arch/Arco linux rolling
 - Virtual box 6.x
 - Vagrant 2.2.x
-- Packer 1.7.8
+- Packer 1.7.8 (1)
 
 # Install
 These commands do most of the installation
