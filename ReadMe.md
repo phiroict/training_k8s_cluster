@@ -11,7 +11,7 @@ sidecars and monitoring.
 
 # Stack
 
-- Archlinux rolling
+- Arch/Arco linux rolling
 - Virtual box 6.x
 - Vagrant 2.2.x
 - Packer 1.7.x
