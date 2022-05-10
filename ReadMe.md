@@ -15,6 +15,7 @@ sidecars and monitoring.
 - Virtual box 6.x
 - Vagrant 2.2.x
 - Packer 1.7.8 (1)
+- sshpass
 
 # Install
 These commands do most of the installation
@@ -34,6 +35,7 @@ vagrant box add corevm_gui builds/ubuntu-20.04-desktop.virtualbox.box
 
 ```bash
 make init
+make image # This will create the images needed for the installation, needs to be done only once. 
 make up
 make install
 ```
@@ -89,6 +91,12 @@ kubectl get secrets
 (You need to get this manually)
 ```bash
 kubectl describe secret dashboard-admin-sa-token-<random_value>
+```
+
+Or get the token from the user 
+
+```bash
+kubectl -n kubernetes-dashboard get secret $(kubectl -n kubernetes-dashboard get dashboard-admin-sa -o jsonpath="{.secrets[0].name}") -o go-template="{{.data.token | base64decode}}"
 ```
 
 Now get the JWT token (token:) and log in.
@@ -381,4 +389,21 @@ Open the kiali dashboard by:
 
 ```bash
 istioctl dashboard kiali
+```
+
+
+# Create a token for the dashboard account
+
+It may occur that the secret is not created for the system account, you can create one here 
+
+```bash
+kubectl apply -f - <<EOF
+apiVersion: v1
+kind: Secret
+metadata:
+  name: dashboard-admin-secret
+  annotations:
+    kubernetes.io/service-account.name: dashboard-admin-sa
+type: kubernetes.io/service-account-token
+EOF
 ```

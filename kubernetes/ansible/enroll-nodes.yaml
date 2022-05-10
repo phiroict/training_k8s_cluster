@@ -1,7 +1,15 @@
+
 - name: Install the admin node for kubernetes
   hosts: nodes
   become: yes
   remote_user: vagrant
   tasks:
+  - name: Reset containerd
+    shell: rm /etc/containerd/config.toml
+    ignore_errors: yes
+  - name: restart containerd
+    systemd:
+      name: containerd
+      state: restarted
   - name: Enroll the nodes
-    shell: "kubeadm join 192.168.51.2:6443 --token a9eqcf.p712skks1hsd67dl  --discovery-token-ca-cert-hash sha256:6b93eb30331ddb8d377683c589f01842d9c0545830b9ee42bd073da7b22058cf"
+    shell: "kubeadm join 192.168.51.2:6443 --token nyi0ao.8buo16wp6urpo7ij  --discovery-token-ca-cert-hash sha256:cf529057656fc7e306691c625970b75178071ccda7fa49597a80001dde713c48"

@@ -1,4 +1,11 @@
 ---
+- name: Reset containerd
+  shell: rm /etc/containerd/config.toml
+  ignore_errors: yes
+- name: restart containerd
+  systemd:
+    name: containerd
+    state: restarted
 - name: Install the main images needed for the master
   shell: kubeadm config images pull
 - name: Initialize the kubernetes stack

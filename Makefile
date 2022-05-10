@@ -1,4 +1,6 @@
 init: deinit
+	sudo pacman -S ansible packer linux-headers virtualbox-host-dkms sshpas
+	sudo /sbin/rcvboxdrv setup
 	echo "Create network for virtualbox"
 	VBoxManage natnetwork add --netname KubeNetwork --network "192.168.51.0/24" --enable
 	-ansible-galaxy collection install community.general
