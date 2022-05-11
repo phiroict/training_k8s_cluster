@@ -47,6 +47,13 @@ image:
 	-vagrant box remove corevm_node
 	cd packer/builds && vagrant box add corevm_node ubuntu-20.04.virtualbox.box
 	cd packer/builds && vagrant box add corevm_gui ubuntu-desktop-20.04.virtualbox.box
+image_arm:
+	cd packer/parallels && PYTHONPATH=/Library/Frameworks/ParallelsVirtualizationSDK.framework/Versions/9/Libraries/Python/3.7  packer build -force ubuntu-20.04-arm64.json.pkr.hcl
+	-vagrant box remove corevm_arm_gui
+	-vagrant box remove corevm_arm_node
+	cd packer/builds && vagrant box add corevm_arm_node ubuntu-20.04-arm64.parallels.box
+	cd packer/builds && vagrant box add corevm_arm_gui ubuntu-20.04-arm64.parallels.box
+
 check_frontend:
 	cd frontend && docker run --rm -i hadolint/hadolint < Dockerfile
 check_backend:
