@@ -2,38 +2,33 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", inline: "sudo apt update && sudo apt upgrade -y && sudo apt install sshpass -y"
   config.vm.boot_timeout = 600
   config.vm.disk :disk, size: "30GB", primary: true
-  config.vm.provider "virtualbox" do |v|
+  config.vm.provider "parallels" do |v|
     v.memory = 4096
     v.cpus = 2
   end
 
   config.vm.define "kube_master" do |kube_master|
     kube_master.vm.box = "corevm_arm_gui"
-    kube_master.vm.network "private_network", ip: "192.168.51.2", virtualbox__intnet: "KubeNetwork", dhcp: false
+    kube_master.vm.network "private_network", ip: "192.168.51.2", netmask: "255.255.255.0"
     kube_master.vm.hostname = "kube-master"
-    kube_master.vm.synced_folder '.', '/vagrant', disabled: true
+    kube_master.vm.synced_folder '.', '/vagrant', disabled: false
     kube_master.vm.network "forwarded_port", guest: 8001, host: 8101
     kube_master.vm.network "forwarded_port", guest: 8443, host: 9443
-    kube_master.vm.provider "virtualbox" do |v|
-      v.gui = true
-      # Some settings to get Ubuntu 20.04 to play nice with the Gnome3 GUI, this may not be needed for 22.04
-      v.customize ["modifyvm", :id, "--vram", "256"]
-      v.customize ['modifyvm', :id, '--graphicscontroller', 'vmsvga']
-      v.customize ['modifyvm', :id, '--accelerate3d', 'off']
-      v.customize ['modifyvm', :id, '--accelerate2dvideo', 'off']
-      v.memory = 8192
-      v.cpus = 4
-      # Make sure that these are installed so we can use the GUI full screen.
+
+    kube_master.vm.provider "parallels" do |v|
+      v.cpus = 8
       v.check_guest_additions = true
+      v.linked_clone = false
     end
   end
 
   config.vm.define "kube_node1" do |node|
     node.vm.box = "corevm_arm_node"
-    node.vm.network "private_network", ip: "192.168.51.3", virtualbox__intnet: "KubeNetwork", dhcp: false
+    node.vm.network "private_network", ip: "192.168.51.3", netmask: "255.255.255.0"
     node.vm.hostname = "kube-node1"
-    node.vm.provider :virtualbox do |vbox|
-      vbox.customize ["modifyvm", :id, "--natnet1", "10.3/16"]
+
+    node.vm.provider :parallels do |vbox|
+      vbox.linked_clone = false
       vbox.check_guest_additions = false
     end
     node.vm.synced_folder '.', '/vagrant', disabled: true
@@ -42,10 +37,11 @@ Vagrant.configure("2") do |config|
   config.vm.define "kube_node2" do |node|
     node.vm.box = "corevm_arm_node"
     node.vm.hostname = "kube-node2"
-    node.vm.network "private_network", ip: "192.168.51.4", virtualbox__intnet: "KubeNetwork", dhcp: false
+    node.vm.network "private_network", ip: "192.168.51.4", netmask: "255.255.255.0"
     node.vm.synced_folder '.', '/vagrant', disabled: true
-    node.vm.provider :virtualbox do |vbox|
-      vbox.customize ["modifyvm", :id, "--natnet1", "10.4/16"]
+
+    node.vm.provider :parallels do |vbox|
+      vbox.linked_clone = false
       vbox.check_guest_additions = false
     end
   end
@@ -53,10 +49,11 @@ Vagrant.configure("2") do |config|
   config.vm.define "kube_node3" do |node|
     node.vm.box = "corevm_arm_node"
     node.vm.hostname = "kube-node3"
-    node.vm.network "private_network", ip: "192.168.51.5", virtualbox__intnet: "KubeNetwork", dhcp: false
+    node.vm.network "private_network", ip: "192.168.51.5", netmask: "255.255.255.0"
     node.vm.synced_folder '.', '/vagrant', disabled: true
-    node.vm.provider :virtualbox do |vbox|
-      vbox.customize ["modifyvm", :id, "--natnet1", "10.5/16"]
+
+    node.vm.provider :parallels do |vbox|
+      vbox.linked_clone = false
       vbox.check_guest_additions = false
     end
   end
@@ -64,10 +61,11 @@ Vagrant.configure("2") do |config|
   config.vm.define "kube_node4" do |node|
     node.vm.box = "corevm_arm_node"
     node.vm.hostname = "kube-node4"
-    node.vm.network "private_network", ip: "192.168.51.6", virtualbox__intnet: "KubeNetwork", dhcp: false
+    node.vm.network "private_network", ip: "192.168.51.6", netmask: "255.255.255.0"
     node.vm.synced_folder '.', '/vagrant', disabled: true
-    node.vm.provider :virtualbox do |vbox|
-      vbox.customize ["modifyvm", :id, "--natnet1", "10.6/16"]
+
+    node.vm.provider :parallels do |vbox|
+      vbox.linked_clone = false
       vbox.check_guest_additions = false
     end
   end

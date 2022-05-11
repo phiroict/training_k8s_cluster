@@ -1,0 +1,24 @@
+---
+all:
+  vars:
+    ansible_ssh_pass: vagrant
+  children:
+    management:
+      hosts:
+        manager1:
+          ansible_port: 22
+          ansible_ssh_host: 192.168.51.2
+    nodes:
+      hosts:
+        node1:
+          ansible_port: 22
+          ansible_ssh_host: 192.168.51.3
+        node2:
+          ansible_port: 22
+          ansible_ssh_host: 192.168.51.4
+        node3:
+          ansible_port: 22
+          ansible_ssh_host: 192.168.51.5
+        node4:
+          ansible_port: 22
+          ansible_ssh_host: 192.168.51.6

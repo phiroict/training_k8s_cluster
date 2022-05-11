@@ -6,10 +6,17 @@ init: deinit
 	-ansible-galaxy collection install community.general
 up:
 	cd kubernetes && vagrant up --parallel
+up_arm:
+	cd kubernetes && VAGRANT_VAGRANTFILE=Vagrantfile_parallells_arm vagrant up --no-parallel
+
 status:
 	cd kubernetes && vagrant status
 down:
 	cd kubernetes && vagrant halt
+down_arm:
+	cd kubernetes && VAGRANT_VAGRANTFILE=Vagrantfile_parallells_arm vagrant halt
+destroy_arm:
+	cd kubernetes && VAGRANT_VAGRANTFILE=Vagrantfile_parallells_arm vagrant destroy -f
 master:
 	cd kubernetes && vagrant ssh kube_master
 provision:
@@ -17,6 +24,10 @@ provision:
 install:
 	cd kubernetes/ansible && ansible-playbook -i hosts.yml --user vagrant install_management_node.yml
 	cd kubernetes/ansible && ansible-playbook -i hosts.yml --user vagrant install-node.yml
+install_arm:
+	cd kubernetes/ansible && ansible-playbook -i hosts.yml --user vagrant install_management_node.yml
+	cd kubernetes/ansible && ansible-playbook -i hosts.yml --user vagrant install-node.yml
+
 enroll_nodes:
 	cd kubernetes/ansible && ansible-playbook -i hosts.yml --user vagrant enroll-nodes.yaml
 master_components_install:
@@ -51,8 +62,8 @@ image_arm:
 	cd packer/parallels && PYTHONPATH=/Library/Frameworks/ParallelsVirtualizationSDK.framework/Versions/9/Libraries/Python/3.7  packer build -force ubuntu-20.04-arm64.json.pkr.hcl
 	-vagrant box remove corevm_arm_gui
 	-vagrant box remove corevm_arm_node
-	cd packer/builds && vagrant box add corevm_arm_node ubuntu-20.04-arm64.parallels.box
-	cd packer/builds && vagrant box add corevm_arm_gui ubuntu-20.04-arm64.parallels.box
+	cd builds && vagrant box add corevm_arm_node ubuntu-20.04-arm64.parallels.box
+	cd builds && vagrant box add corevm_arm_gui ubuntu-20.04-arm64.parallels.box
 
 check_frontend:
 	cd frontend && docker run --rm -i hadolint/hadolint < Dockerfile
