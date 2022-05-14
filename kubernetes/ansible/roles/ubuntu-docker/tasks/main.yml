@@ -5,18 +5,31 @@
       state: present
   - name: Install docker repo
     apt_repository:
-      repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
+      repo: "deb [arch={{ architecture }}] https://download.docker.com/linux/ubuntu focal stable"
       state: present
+  - name: Install docker repo edge
+    apt_repository:
+      repo: "deb [arch={{ architecture }}] https://download.docker.com/linux/ubuntu focal edge"
+      state: present
+
   - name: Install docker
     apt:
       name: "{{ packages }}"
       state: present
+      update_cache: yes
     vars:
       packages:
       - docker-ce
-      - curl
+      - docker-ce-cli
+      - containerd.io
+      - docker-compose-plugin
   - name: Install docker compose
     shell: "curl -L https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-`uname -s`-`uname -m` -o /usr/bin/docker-compose && chmod +x /usr/bin/docker-compose"
+  - name: Create docker group
+    group:
+      name: docker
+      state: present
+
   - name: add group docker for user
     user:
       name: "{{ lookup('env','USER') }}"
@@ -35,6 +48,10 @@
       owner: "{{ lookup('env','USER') }}"
       group: "{{ lookup('env','USER') }}"
     when: docker_proxy is defined
+  - name: Create logger directory
+    file:
+      path: /etc/docker
+      state: directory
   - name: Install logger for docker
     copy:
       remote_src: no

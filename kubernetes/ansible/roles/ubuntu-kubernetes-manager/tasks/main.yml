@@ -85,6 +85,5 @@
     state: present
   loop:
     - helm
-    - code
 - name: Cast the desktop url to a file
   shell: echo "http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/." > /home/vagrant/dashboard_url.txt
