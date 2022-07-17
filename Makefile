@@ -25,8 +25,8 @@ install:
 	cd kubernetes/ansible && ansible-playbook -i hosts.yml --user vagrant install_management_node.yml
 	cd kubernetes/ansible && ansible-playbook -i hosts.yml --user vagrant install-node.yml
 install_arm:
-	cd kubernetes/ansible && ansible-playbook -i hosts.yml --user vagrant install_management_node.yml
-	cd kubernetes/ansible && ansible-playbook -i hosts.yml --user vagrant install-node.yml
+	cd kubernetes/ansible && ansible-playbook -i hosts_parallels.yml --user vagrant install_management_node.yml
+	cd kubernetes/ansible && ansible-playbook -i hosts_parallels.yml --user vagrant install-node.yml
 
 enroll_nodes:
 	cd kubernetes/ansible && ansible-playbook -i hosts.yml --user vagrant enroll-nodes.yaml
