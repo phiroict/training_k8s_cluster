@@ -1,0 +1,16 @@
+---
+- name: Insert shortcuts in the commandline
+  lineinfile:
+    path: "/home/vagrant/.bashrc"
+    line: "{{ item }}"
+    owner: "vagrant"
+    group: "vagrant"
+  loop:
+    - 'alias k="kubectl"'
+    - 'alias ka="kubeadm"'
+    - 'alias e="etcdctl"'
+- name: Install code completion
+  shell: "{{ item }}"
+  loop:
+    - "echo 'source <(kubectl completion bash)' >>/home/vagrant/.bashrc"
+    - "echo 'complete -o default -F __start_kubectl k' >>/home/vagrant/.bashrc"

@@ -36,6 +36,7 @@ istio_install:
 	cd kubernetes/ansible && ansible-playbook -i hosts.yml --user vagrant master_istio_install.yml
 almost_all: init up install join enroll_nodes
 all: init up install join enroll_nodes master_components_install istio_install
+all_arm: up_arm install_arm join enroll_nodes master_components_install istio_install
 destroy:
 	cd kubernetes && vagrant destroy -f
 deinit:

@@ -9,6 +9,7 @@
     - { role: ubuntu-docker, tags: ["complete", "base"] }
     - { role: ubuntu-kubernetes-core, tags: ["complete", "base"] }
     - { role: ubuntu-kubernetes-manager, tags: ["complete", "base"] }
+    - { role: ubuntu-dev-master-config, tags: ["complete", "base"] }
   pre_tasks:
   - name: Disable swap for current session
     command: swapoff -a
