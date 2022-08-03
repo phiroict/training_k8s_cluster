@@ -36,5 +36,5 @@ apt-get -y update;
 
 # Upgrade all installed packages incl. kernel and kernel headers
 apt-get -y dist-upgrade -o Dpkg::Options::="--force-confnew";
-aot-get install ansible -y
+apt-get install ansible -y
 reboot
