@@ -29,6 +29,7 @@
     - kubeadm
     - kubectl
     - etcd-client
+    - bash-completion
 - name: Create sysctl conf file for kubernetes
   file:
     state: touch

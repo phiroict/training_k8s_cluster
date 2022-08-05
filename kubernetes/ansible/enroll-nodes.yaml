@@ -12,4 +12,4 @@
       name: containerd
       state: restarted
   - name: Enroll the nodes
-    shell: "kubeadm join 192.168.51.2:6443 --token nyi0ao.8buo16wp6urpo7ij  --discovery-token-ca-cert-hash sha256:cf529057656fc7e306691c625970b75178071ccda7fa49597a80001dde713c48"
+    shell: "kubeadm join 192.168.51.2:6443 --token wuvbhj.a5gyjxggoyh8657c  --discovery-token-ca-cert-hash sha256:b6aa259f32e5c11d62b43b4bcb52aa8e43fb1fec5c546defaf87a926451f2636"
