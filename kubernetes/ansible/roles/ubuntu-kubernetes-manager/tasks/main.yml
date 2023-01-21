@@ -8,16 +8,17 @@
     state: restarted
 - name: Install the main images needed for the master
   shell: kubeadm config images pull
-- name: Initialize the kubernetes stack
-  shell: "sudo kubeadm init --apiserver-advertise-address=192.168.51.2 --pod-network-cidr=10.244.0.0/16"
-  register: output
-- name: Get the tokens from the output.
-  debug:
-    var: output.stdout_lines
-- name: Write the result to a file (insecure)
-  copy:
-    dest: /root/initial_cluster.txt
-    content: "{{ output.stdout_lines }}"
+- name: initialize or reinitialize initial_cluster
+  block:
+  - name: Init kubeadm
+    include_tasks:
+      file: kube-init.yml
+  rescue:
+  - name: reset the cluster
+    shell: "sudo kubeadm reset -f"
+  - name: Init kubeadm
+    include_tasks:
+      file: kube-init.yml
 - name: Copy over join grabber
   copy:
     src: "join-grabber.py"
@@ -64,7 +65,7 @@
     line: 'Environment="KUBELET_EXTRA_ARGS=--node-ip=192.168.51.2"'
 - name: Get the dashboard application as well
   get_url:
-    url: https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended.yaml
+    url: https://raw.githubusercontent.com/kubernetes/dashboard/v{{ k8s_dashboard }}/aio/deploy/recommended.yaml
     dest: /home/vagrant/dashboard.yaml
     owner: vagrant
     group: vagrant
@@ -86,5 +87,16 @@
   loop:
     - helm
     - kustomize
+  when: ansible_architecture == "x86_64"
+
+- name: Install visual code and helm
+  community.general.snap:
+    classic: yes
+    name: "{{ item }}"
+    state: present
+  loop:
+    - helm
+  when: ansible_architecture == "aarch64"
+
 - name: Cast the desktop url to a file
   shell: echo "http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/." > /home/vagrant/dashboard_url.txt

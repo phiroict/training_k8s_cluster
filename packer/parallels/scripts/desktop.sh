@@ -1,4 +1,4 @@
 #!/bin/sh -eux
 
 apt update
-apt install --yes ubuntu-desktop gdm3 terminator
+apt install --yes ubuntu-desktop gdm3 terminator firefox

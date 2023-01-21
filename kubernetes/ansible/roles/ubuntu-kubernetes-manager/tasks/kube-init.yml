@@ -1,0 +1,10 @@
+- name: Initialize the kubernetes stack
+  shell: "sudo kubeadm init --apiserver-advertise-address=192.168.51.2 --pod-network-cidr=10.244.0.0/16"
+  register: output
+- name: Get the tokens from the output.
+  debug:
+    var: output.stdout_lines
+- name: Write the result to a file (insecure)
+  copy:
+    dest: /root/initial_cluster.txt
+    content: "{{ output.stdout_lines }}"
