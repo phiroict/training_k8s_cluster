@@ -1,36 +1,43 @@
 ---
-  - name: Add the docker Apt signing key, uses whichever key is at the URL
-    apt_key:
-      url: "https://download.docker.com/linux/ubuntu/gpg"
-      state: present
-  - name: Install docker repo edge
-    apt_repository:
-      repo: "deb [arch={{ architecture }}] https://download.docker.com/linux/ubuntu focal stable"
-      state: present
-  - name: Force update of the repo
-    shell: "apt update"
-  - name: Install docker
-    apt:
-      name: "{{ packages }}"
-      state: present
-      update_cache: yes
-    vars:
-      packages:
-      - docker-ce
-      - docker-ce-cli
-      - containerd.io
-      - docker-compose-plugin
-      - ca-certificates
-      - curl
-      - gnupg
-      - lsb-release
-  - name: Install docker compose
-    shell: "curl -L https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-`uname -s`-`uname -m` -o /usr/bin/docker-compose && chmod +x /usr/bin/docker-compose"
-  - name: Create docker group
-    group:
-      name: docker
-      state: present
-
+  - name: Install docker for amd
+    block:
+      - name: Add the docker Apt signing key, uses whichever key is at the URL
+        apt_key:
+          url: "https://download.docker.com/linux/ubuntu/gpg"
+          state: present
+      - name: Install docker repo edge
+        apt_repository:
+          repo: "deb [arch={{ architecture }}] https://download.docker.com/linux/ubuntu focal stable"
+          state: present
+      - name: Force update of the repo
+        shell: "apt update"
+      - name: Install docker
+        apt:
+          name: "{{ packages }}"
+          state: present
+          update_cache: yes
+        vars:
+          packages:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-compose-plugin
+          - ca-certificates
+          - curl
+          - gnupg
+          - lsb-release
+      - name: Install docker compose
+        shell: "curl -L https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-`uname -s`-`uname -m` -o /usr/bin/docker-compose && chmod +x /usr/bin/docker-compose"
+      - name: Create docker group
+        group:
+          name: docker
+          state: present
+    when: ansible_architecture == "x86_64"
+  - name: install docker for aarch64
+    block:
+    - name: Install the docker install script
+      shell: curl -fsSL test.docker.com -o get-docker.sh && sh get-docker.sh
+    when: ansible_architecture == "aarch64"
   - name: add group docker for user
     user:
       name: "{{ lookup('env','USER') }}"

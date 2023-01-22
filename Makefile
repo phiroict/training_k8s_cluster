@@ -7,7 +7,7 @@ init: deinit
 up:
 	cd kubernetes && VAGRANT_VAGRANTFILE=vagrant/virtualbox/Vagrantfile vagrant up --parallel
 up_arm:
-	cd kubernetes && VAGRANT_VAGRANTFILE=vagrant/parallels/Vagrantfile vagrant up
+	cd kubernetes && VAGRANT_VAGRANTFILE=vagrant/parallels/Vagrantfile vagrant up --no-parallel
 reload_arm:
 	cd kubernetes && VAGRANT_VAGRANTFILE=vagrant/parallels/Vagrantfile vagrant reload
 
