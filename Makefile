@@ -5,20 +5,22 @@ init: deinit
 	VBoxManage natnetwork add --netname KubeNetwork --network "192.168.51.0/24" --enable
 	-ansible-galaxy collection install community.general
 up:
-	cd kubernetes && vagrant up --parallel
+	cd kubernetes && VAGRANT_VAGRANTFILE=vagrant/virtualbox/Vagrantfile vagrant up --parallel
 up_arm:
-	cd kubernetes && VAGRANT_VAGRANTFILE=Vagrantfile_parallells_arm vagrant up --no-parallel
+	cd kubernetes && VAGRANT_VAGRANTFILE=vagrant/parallels/Vagrantfile vagrant up
+reload_arm:
+	cd kubernetes && VAGRANT_VAGRANTFILE=vagrant/parallels/Vagrantfile vagrant reload
 
 status:
-	cd kubernetes && vagrant status
+	cd kubernetes && VAGRANT_VAGRANTFILE=vagrant/virtualbox/Vagrantfile vagrant status
 down:
-	cd kubernetes && vagrant halt
+	cd kubernetes && VAGRANT_VAGRANTFILE=vagrant/virtualbox/Vagrantfile vagrant halt
 down_arm:
-	cd kubernetes && VAGRANT_VAGRANTFILE=Vagrantfile_parallells_arm vagrant halt
+	cd kubernetes && VAGRANT_VAGRANTFILE=vagrant/parallels/Vagrantfile vagrant halt
 destroy_arm:
-	cd kubernetes && VAGRANT_VAGRANTFILE=Vagrantfile_parallells_arm vagrant destroy -f
+	cd kubernetes && VAGRANT_VAGRANTFILE=vagrant/parallels/Vagrantfile vagrant destroy -f
 master:
-	cd kubernetes && vagrant ssh kube_master
+	cd kubernetes && vagrant ssh kube-master
 provision:
 	cd kubernetes && vagrant up --provision
 install:
