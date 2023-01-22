@@ -77,3 +77,5 @@ build_frontend: check_frontend
 	cd frontend && docker build -t phiroict/k8s-test-frontend:20210829 . && docker push phiroict/k8s-test-frontend:20210829
 build_backend: check_backend
 	cd backend && docker build -t phiroict/k8s-test-backend:20210829.4 . && docker push phiroict/k8s-test-backend:20210829.4
+set_hosts:
+	./set-hosts.sh
