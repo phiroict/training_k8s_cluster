@@ -1,5 +1,5 @@
 init: deinit
-	sudo pacman -S --needed ansible packer linux-headers virtualbox-host-dkms sshpass
+	sudo pacman -S --needed ansible packer linux-headers virtualbox-host-dkms sshpass vagrant
 	sudo /sbin/rcvboxdrv setup
 	echo "Create network for virtualbox"
 	VBoxManage natnetwork add --netname KubeNetwork --network "192.168.51.0/24" --enable
